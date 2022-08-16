@@ -10,9 +10,30 @@ services:
     build:
       context: .
       dockerfile: nginx.Dockerfile
+    image: nginx89
     ports:
       - '80:80'
   web:
     image: httpd
     volumes:
       - ./html:/usr/local/apache2/htdocs/
+
+# EXPLANATION
+  # we have two services... proxy & web
+  # ________see the 'proxy' section
+    # we are trying something
+    # see the build arguments...  
+      # context ===========> . DOT          // build the Dockerfile in this current directory
+      # dockerfile ========> nginx.Dockerfile   // We are asking docker to use this 'nginx.Dockerfile' as our Dockerfile
+    # Inside the nginx.Dockerfile ====> FROM nginx:1.23 (so, we are using this image)
+    # image: nginx89 ====> we want this image to be called as nginx89 in our records... If we omit this image section... then compose-naming kicks in...
+      # the directory/folder name is assigned to the image
+  # ________ see the 'web' section
+    # here we are using httpd image... it seems this refers to apache image
+    # we are mounting some html source files into /usr/local/apache2/htdocs folder of docker container
+    # a developer has static website inside html folder... 
+      # this static website in production sits behind a nginx proxy server
+      # so, we want to emulate that production environment as much as possible locally... thats why we run apache behind nginx proxy server here also
+      # see the nginx.conf file ====> same one used in production configuration that we use here...
+
+# 

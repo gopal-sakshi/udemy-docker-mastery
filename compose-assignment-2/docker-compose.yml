@@ -1,1 +1,37 @@
 # create your drupal and postgres config here, based off the last assignment
+
+services:
+# DNS names (set as aliases) for containers in a compose file come from the service name declared in the .yml
+  drupal:
+    image: drupal23 
+    # rename the image... if we use drupal ===> docker will pull drupal image from docker hub... but we dont want it that way... see build section
+    # if we leave empty (or) we can leave the image section altogether... docker will assign the folder name to the image name... but it can be confusing
+    # so, we will use some custom name... say drupal23 ===> henceforth, image name will be drupal23
+    build: .
+    # we just used . dot here... its just shortcut (or) shorthand for
+      # just build in this directory... and use Dockerfile in this directory... no build options
+    ports:
+      - "8080:80"
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+  postgres:
+    image: postgres:14.3
+    environment:
+      - POSTGRES_PASSWORD=1258
+    volumes:
+      - drupalData23:/var/lib/postgresql/data
+    # we give volumes... because we want to preserve the data across compose restarts...
+
+volumes:
+  drupalData23:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+
+# dont need any ports... will use the default one inside the network
+# you only need to use port, when u use -p option
+# since, both containers are in the same docker network, I dont need to do anything for them to connect... they just gonna work

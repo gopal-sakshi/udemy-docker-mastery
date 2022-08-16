@@ -9,6 +9,13 @@ services:
   jekyll:
     image: bretfisher/jekyll-serve
     volumes:
-      - .:/site
+      - .:/site             
     ports:
       - '80:4000'
+
+
+# volumes
+  # .:/site ---------> dot before the colon means... mount the current working directory of docker host into site folder of docker container
+  # 
+# misc
+  # its either volume (or) volumes
